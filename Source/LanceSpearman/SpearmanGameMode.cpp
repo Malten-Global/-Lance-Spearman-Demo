@@ -1,5 +1,6 @@
 #include "SpearmanGameMode.h"
 #include "SpearmanCharacter.h"
+#include "SpearmanGuard.h"
 #include "SpearmanObjective.h"
 #include "Engine/World.h"
 #include "Engine/StaticMeshActor.h"
@@ -27,5 +28,8 @@ void ASpearmanGameMode::BeginPlay(){
   SpawnBlock(FVector(X,300.f,150.f),FVector(.12f,.12f,2.f));
  }
  GetWorld()->SpawnActor<ASpearmanObjective>(FVector(-1000.f,300.f,140.f),FRotator::ZeroRotator);
+ // Primitive patrol stand-ins; replace with skeletal-mesh AI after Windows build verification.
+ GetWorld()->SpawnActor<ASpearmanGuard>(FVector(-450.f,-220.f,100.f),FRotator::ZeroRotator);
+ GetWorld()->SpawnActor<ASpearmanGuard>(FVector(850.f,200.f,100.f),FRotator::ZeroRotator);
  if(GEngine)GEngine->AddOnScreenDebugMessage(-1,20.f,FColor::Yellow,TEXT("CHAPTER 1 / LEVEL 1: Arrival at the Market | Find the contact marker and press E | WASD move, Shift sprint"));
 }
