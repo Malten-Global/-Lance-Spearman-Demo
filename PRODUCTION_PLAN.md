@@ -18,7 +18,8 @@ Explore a recognizable African city; investigate clues; meet and question NPCs; 
 10. The Final Reckoning — Nairobi
 
 ## Required systems
-- Human character models, locomotion, dialogue, pedestrians, and NPC schedules.
+- Realistic human character models with detailed faces, diverse clothing, rigging, walk cycles, expressive dialogue, pedestrians, and NPC schedules; replace current geometric placeholders.
+- One original Nairobi instrumental soundtrack in the browser prototype, with a player-controlled music toggle; commission a mastered recording for commercial release.
 - Road-following traffic, signals, pedestrian crossings, collision detection, enterable vehicles.
 - Landmark-informed open-world neighborhoods; discoverable fast travel; road and air travel transitions.
 - Player combat: strike, block, dodge, counter, takedown; stamina and health; boss phases and checkpoints.
