@@ -5,6 +5,10 @@
 #include "Engine/World.h"
 #include "Engine/StaticMeshActor.h"
 #include "Engine/Engine.h"
+#include "GameFramework/PlayerStart.h"
+#include "Components/StaticMeshComponent.h"
+#include "Engine/DirectionalLight.h"
+#include "Components/DirectionalLightComponent.h"
 #include "UObject/ConstructorHelpers.h"
 ASpearmanGameMode::ASpearmanGameMode(){DefaultPawnClass=ASpearmanCharacter::StaticClass();}
 void ASpearmanGameMode::SpawnBlock(const FVector& Position,const FVector& Scale){
@@ -15,7 +19,7 @@ void ASpearmanGameMode::SpawnBlock(const FVector& Position,const FVector& Scale)
 }
 void ASpearmanGameMode::BeginPlay(){
  Super::BeginPlay();
- // Engine cube is 100cm per axis. Large floor, roadside shops and market stalls.
+ // Spawn a predictable playable start, rather than relying on the empty Entry map.\n GetWorld()->SpawnActor<APlayerStart>(FVector(-1700.f,-450.f,130.f),FRotator(0.f,0.f,0.f));\n // Engine cube is 100cm per axis. Large floor, roadside shops and market stalls.
  SpawnBlock(FVector(0,0,-70),FVector(42,42,1));
  for(int32 I=-3;I<=3;++I){
   if(I==0)continue;
