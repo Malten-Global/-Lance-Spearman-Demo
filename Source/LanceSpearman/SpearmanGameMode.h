@@ -7,7 +7,7 @@ class LANCESPEARMAN_API ASpearmanGameMode : public AGameModeBase {
  GENERATED_BODY()
 public:
  ASpearmanGameMode();
- virtual void BeginPlay() override;
+ virtual void InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage) override;
 private:
  void SpawnBlock(const FVector& Position,const FVector& Scale);
 };
