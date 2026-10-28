@@ -9,17 +9,29 @@
 #include "Components/StaticMeshComponent.h"
 #include "Engine/DirectionalLight.h"
 #include "Components/DirectionalLightComponent.h"
-#include "UObject/ConstructorHelpers.h"
+#include "Engine/StaticMesh.h"
 ASpearmanGameMode::ASpearmanGameMode(){DefaultPawnClass=ASpearmanCharacter::StaticClass();}
 void ASpearmanGameMode::SpawnBlock(const FVector& Position,const FVector& Scale){
- AStaticMeshActor* A=GetWorld()->SpawnActor<AStaticMeshActor>(Position,FRotator::ZeroRotator);
+ // StaticMeshActor defaults to static mobility; set the transform only after making it movable.
+ AStaticMeshActor* A=GetWorld()->SpawnActor<AStaticMeshActor>();
  if(!A)return;
+ A->GetStaticMeshComponent()->SetMobility(EComponentMobility::Movable);
+ A->SetActorLocation(Position);
  UStaticMesh* Cube=LoadObject<UStaticMesh>(nullptr,TEXT("/Engine/BasicShapes/Cube.Cube"));
  if(Cube){A->GetStaticMeshComponent()->SetStaticMesh(Cube);A->SetActorScale3D(Scale);A->GetStaticMeshComponent()->SetMobility(EComponentMobility::Static);}
 }
 void ASpearmanGameMode::InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage){
  Super::InitGame(MapName, Options, ErrorMessage);
- // Spawn a predictable playable start, rather than relying on the empty Entry map.\n GetWorld()->SpawnActor<APlayerStart>(FVector(-1700.f,-450.f,130.f),FRotator(0.f,0.f,0.f));\n // Engine cube is 100cm per axis. Large floor, roadside shops and market stalls.
+ // Spawn before the default pawn is created; do not rely on the empty Entry map.
+ GetWorld()->SpawnActor<APlayerStart>(FVector(-1700.f,-450.f,130.f),FRotator::ZeroRotator);
+ // Entry has no authored market lighting. Supply a runtime light for the blockout.
+ ADirectionalLight* Sun=GetWorld()->SpawnActor<ADirectionalLight>();
+ if(Sun){
+  Sun->GetLightComponent()->SetMobility(EComponentMobility::Movable);
+  Sun->SetActorRotation(FRotator(-50.f,-30.f,0.f));
+  Sun->GetLightComponent()->SetIntensity(3.f);
+ }
+ // Engine cube is 100cm per axis. Large floor, roadside shops and market stalls.
  SpawnBlock(FVector(0,0,-70),FVector(42,42,1));
  for(int32 I=-3;I<=3;++I){
   if(I==0)continue;
