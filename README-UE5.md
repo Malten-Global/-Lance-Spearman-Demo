@@ -18,6 +18,8 @@ Game development with C++, MSVC v143 x64/x86 **14.38 (VS 17.8)** and Windows SDK
 Use a DX12-capable Windows development PC.
 Epic setup reference: https://dev.epicgames.com/documentation/en-us/unreal-engine/setting-up-visual-studio-development-environment-for-cplusplus-projects-in-unreal-engine?application_version=5.4
 
+Run `Scripts/Validate-Windows.ps1 -Output C:\\Builds\\Lance-Test-01` on a UE5.4 Windows workstation to build and archive in a new directory with a transcript. Then launch the archived executable and perform the checks below.
+
 ## Clean checkout and build
 In PowerShell, from the repository root on branch ue5-chapter1-level1.
 Close Unreal Editor first (avoid Live Coding). A fresh checkout needs no generated
@@ -64,7 +66,7 @@ Entry, Cube, Cylinder or Sphere packages. Fix errors before calling the build pa
   left face button interact. Check camera usability and dead zones.
 - Contact is a default sphere near (-1000,300,140), **not a gold material**.
   Outside 240 cm, E must do nothing. Approach and press E: completion text appears
-  once and the sphere disappears. This tests the contact only, not a full mission.
+  and the marker moves to extraction at (1200,-550,140). Confirm E at the old contact cannot finish the mission. Reach extraction and interact: the completion message appears and the marker disappears.
 - Guards patrol and show alert text in range/line of sight; cover blocks detection.
 - Stop/restart PIE, then close/relaunch the package: the contact must reset.
 - Record collisions, camera clipping, dark areas and input failures.
