@@ -76,10 +76,14 @@ Windows version, GPU/driver, build and UAT exit codes, and each result above.
 Keep Saved/Logs and AutomationTool logs (the UAT console prints their location).
 Do not commit generated files. Mark unrun steps NOT RUN; attach logs for failures.
 
+### Restart and boundary checks (pending Windows playtest)
+- Press R, or controller Menu, after pickup and again after extraction. Each reload should return Lance to the start with the contact available and guards at their initial patrol positions.
+- Walk and sprint against all four perimeter walls and the corners. Check that the player stays on the floor and the camera recovers when moving away.
+
 ## Remaining release blockers
 The character has no visible skeletal mesh or animation. Guards are primitive,
 non-navigation-aware stand-ins; the contact is a sphere. No dedicated authored map,
-crowds, multi-stage mission, extraction, dialogue, proper HUD, pause/restart UI,
+crowds, dialogue, proper HUD, pause menu,
 checkpoint system or production audio exists. Licensed art and performance/crash/
 controller/accessibility QA are outstanding. There are no Unreal automation tests
 or Windows CI yet. A successful clean Windows build, cook and both smoke runs are
