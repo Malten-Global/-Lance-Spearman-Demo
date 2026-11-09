@@ -6,6 +6,7 @@
 #include "Components/InputComponent.h"
 #include "Engine/World.h"
 #include "EngineUtils.h"
+#include "Kismet/GameplayStatics.h"
 ASpearmanCharacter::ASpearmanCharacter() {
  PrimaryActorTick.bCanEverTick=false;
  CameraBoom=CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));
@@ -27,6 +28,7 @@ void ASpearmanCharacter::SetupPlayerInputComponent(UInputComponent* Input) {
  Input->BindAction("Jump",IE_Released,this,&ACharacter::StopJumping);
  Input->BindAction("Sprint",IE_Pressed,this,&ASpearmanCharacter::StartSprint);
  Input->BindAction("Sprint",IE_Released,this,&ASpearmanCharacter::StopSprint);
+ Input->BindAction("RestartMission", IE_Pressed, this, &ASpearmanCharacter::RestartMission);
  Input->BindAction("Interact",IE_Pressed,this,&ASpearmanCharacter::Interact);
 }
 void ASpearmanCharacter::MoveForward(float Value) { if(Controller&&Value!=0) AddMovementInput(FRotationMatrix(FRotator(0,Controller->GetControlRotation().Yaw,0)).GetUnitAxis(EAxis::X),Value); }
@@ -37,4 +39,9 @@ void ASpearmanCharacter::Interact(){
  ASpearmanObjective* Closest=nullptr;float Best=240.f;
  for(TActorIterator<ASpearmanObjective> It(GetWorld());It;++It){float D=FVector::Dist(GetActorLocation(),It->GetActorLocation());if(D<Best){Best=D;Closest=*It;}}
  if(Closest)Closest->Activate(this);
+}
+void ASpearmanCharacter::RestartMission()
+{
+ // Reload the configured game map so the contact, guards and player start reset together.
+ UGameplayStatics::OpenLevel(this, FName(TEXT("/Engine/Maps/Entry")));
 }
