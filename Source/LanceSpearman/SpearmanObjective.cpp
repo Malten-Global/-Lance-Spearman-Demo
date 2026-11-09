@@ -2,6 +2,7 @@
 #include "SpearmanCharacter.h"
 #include "Components/StaticMeshComponent.h"
 #include "Engine/Engine.h"
+#include "Engine/StaticMesh.h"
 #include "UObject/ConstructorHelpers.h"
 ASpearmanObjective::ASpearmanObjective(){
  PrimaryActorTick.bCanEverTick=false;
@@ -21,6 +22,6 @@ void ASpearmanObjective::Activate(ASpearmanCharacter* Player){
    TEXT("Package secured. Cross the market to the extraction marker and press E."));
   return;
  }
- if(GEngine)GEngine->AddOnScreenDebugMessage(-1,12.f,FColor::Green,TEXT("LEVEL 1 COMPLETE: Encrypted package extracted. Courier mission complete!"));
+ if(GEngine)GEngine->AddOnScreenDebugMessage(-1,12.f,FColor::Green,TEXT("LEVEL 1 COMPLETE: Encrypted package extracted. Press R or controller Menu to replay."));
  Destroy();
 }
