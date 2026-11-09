@@ -11,6 +11,7 @@ public:
  virtual void SetupPlayerInputComponent(UInputComponent* InputComponent) override;
  void MoveForward(float Value); void MoveRight(float Value);
  void StartSprint(); void StopSprint(); void Interact();
+ void RestartMission();
 protected:
  UPROPERTY(VisibleAnywhere) USpringArmComponent* CameraBoom;
  UPROPERTY(VisibleAnywhere) UCameraComponent* FollowCamera;
