@@ -33,6 +33,11 @@ void ASpearmanGameMode::InitGame(const FString& MapName, const FString& Options,
  }
  // Engine cube is 100cm per axis. Large floor, roadside shops and market stalls.
  SpawnBlock(FVector(0,0,-70),FVector(42,42,1));
+ // Enclose the playable floor with market walls. Their inner faces sit inside the floor edge.
+ for (const float Side : {-1.f, 1.f}) {
+  SpawnBlock(FVector(Side * 2075.f, 0.f, 140.f), FVector(.5f, 42.f, 3.2f));
+  SpawnBlock(FVector(0.f, Side * 2075.f, 140.f), FVector(41.f, .5f, 3.2f));
+ }
  for(int32 I=-3;I<=3;++I){
   if(I==0)continue;
   SpawnBlock(FVector(I*550.f,-1050.f,230.f),FVector(4,3,6));
@@ -47,5 +52,5 @@ void ASpearmanGameMode::InitGame(const FString& MapName, const FString& Options,
  // Primitive patrol stand-ins; replace with skeletal-mesh AI after Windows build verification.
  GetWorld()->SpawnActor<ASpearmanGuard>(FVector(-450.f,-220.f,100.f),FRotator::ZeroRotator);
  GetWorld()->SpawnActor<ASpearmanGuard>(FVector(850.f,200.f,100.f),FRotator::ZeroRotator);
- if(GEngine)GEngine->AddOnScreenDebugMessage(-1,20.f,FColor::Yellow,TEXT("CHAPTER 1 / LEVEL 1: Arrival at the Market | Find the contact marker and press E | WASD move, Shift sprint"));
+ if(GEngine)GEngine->AddOnScreenDebugMessage(-1,20.f,FColor::Yellow,TEXT("CHAPTER 1 / LEVEL 1: Arrival at the Market | Find the contact marker and press E | WASD move, Shift sprint, R restart"));
 }
