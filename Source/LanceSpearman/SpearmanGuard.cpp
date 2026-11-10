@@ -3,6 +3,7 @@
 #include "Components/StaticMeshComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Engine/World.h"
+#include "Engine/StaticMesh.h"
 #include "Engine/Engine.h"
 #include "UObject/ConstructorHelpers.h"
 ASpearmanGuard::ASpearmanGuard(){
