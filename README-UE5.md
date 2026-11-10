@@ -76,12 +76,14 @@ Windows version, GPU/driver, build and UAT exit codes, and each result above.
 Keep Saved/Logs and AutomationTool logs (the UAT console prints their location).
 Do not commit generated files. Mark unrun steps NOT RUN; attach logs for failures.
 
+- In both editor and packaged play, check the silhouette from behind and from the side. Walk, sprint, jump and stop. Opposite arms and legs should swing together on the ground, with the swing easing down at rest or airborne.
+
 ### Restart and boundary checks (pending Windows playtest)
 - Press R, or controller Menu, after pickup and again after extraction. Each reload should return Lance to the start with the contact available and guards at their initial patrol positions.
 - Walk and sprint against all four perimeter walls and the corners. Check that the player stays on the floor and the camera recovers when moving away.
 
 ## Remaining release blockers
-The character has no visible skeletal mesh or animation. Guards are primitive,
+Lance uses a jointed basic-shape stand-in. A production skeletal character and locomotion clips are still required. Guards are primitive,
 non-navigation-aware stand-ins; the contact is a sphere. No dedicated authored map,
 crowds, dialogue, proper HUD, pause menu,
 checkpoint system or production audio exists. Licensed art and performance/crash/
