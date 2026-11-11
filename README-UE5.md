@@ -82,9 +82,16 @@ Do not commit generated files. Mark unrun steps NOT RUN; attach logs for failure
 - Press R, or controller Menu, after pickup and again after extraction. Each reload should return Lance to the start with the contact available and guards at their initial patrol positions.
 - Walk and sprint against all four perimeter walls and the corners. Check that the player stays on the floor and the camera recovers when moving away.
 
+### Guard checks (pending Windows playtest)
+- Confirm patrols reverse at route ends and before stalls or perimeter walls. They should face their travel direction.
+- Approach behind a guard within detection range. Confirm there is no alert until entering its forward 120-degree view cone.
+- Approach in front within 420 cm, then repeat with a stall blocking sight. Only the unobstructed approach should alert.
+- Repeat after R restart and with a low frame rate. Check for obstacle penetration or repeated turning when trapped.
+- The current patrol reverses when blocked. Routing around an obstacle requires the planned navigation implementation.
+
 ## Remaining release blockers
 Lance uses a jointed basic-shape stand-in. A production skeletal character and locomotion clips are still required. Guards are primitive,
-non-navigation-aware stand-ins; the contact is a sphere. No dedicated authored map,
+stand-ins with obstacle-reversing patrols and a forward view cone; navigation-mesh routing remains pending; the contact is a sphere. No dedicated authored map,
 crowds, dialogue, proper HUD, pause menu,
 checkpoint system or production audio exists. Licensed art and performance/crash/
 controller/accessibility QA are outstanding. There are no Unreal automation tests
