@@ -20,12 +20,29 @@ void ASpearmanGuard::Tick(float Dt){
  Super::Tick(Dt);
  const FVector End=Origin+FVector(PatrolDistance,0,0);
  const FVector Goal=bGoingOut?End:Origin;
- const FVector Next=FMath::VInterpConstantTo(GetActorLocation(),Goal,Dt,WalkSpeed);
- SetActorLocation(Next);
- if(FVector::DistSquared2D(Next,Goal)<FMath::Square(15.f))bGoingOut=!bGoingOut;
+ const FVector Start = GetActorLocation();
+ const FVector Next = FMath::VInterpConstantTo(Start, Goal, Dt, WalkSpeed);
+ const FVector Direction = (Goal - Start).GetSafeNormal2D();
+ if (!Direction.IsNearlyZero()) SetActorRotation(Direction.Rotation());
+
+ // Check the entire step, so a long frame cannot carry a patrol through a stall.
+ FHitResult Obstacle;
+ FCollisionQueryParams PatrolQuery(SCENE_QUERY_STAT(GuardPatrol), false, this);
+ const bool bBlocked = GetWorld()->SweepSingleByChannel(
+  Obstacle, Start, Next, FQuat::Identity, ECC_WorldStatic,
+  FCollisionShape::MakeCapsule(24.f, 90.f), PatrolQuery);
+ if (bBlocked) {
+  bGoingOut = !bGoingOut;
+ } else {
+  SetActorLocation(Next);
+  if (FVector::DistSquared2D(Next, Goal) < FMath::Square(15.f)) bGoingOut = !bGoingOut;
+ }
  AlertCooldown=FMath::Max(0.f,AlertCooldown-Dt);
  ASpearmanCharacter* Player=Cast<ASpearmanCharacter>(UGameplayStatics::GetPlayerCharacter(this,0));
  if(!Player||AlertCooldown>0.f||FVector::Dist2D(Player->GetActorLocation(),GetActorLocation())>DetectionRadius)return;
+ const FVector ToPlayer = (Player->GetActorLocation() - GetActorLocation()).GetSafeNormal2D();
+ // A 120-degree field of view gives the player a readable approach from behind.
+ if (FVector::DotProduct(GetActorForwardVector(), ToPlayer) < .5f) return;
  FHitResult Hit;
  const FVector Eye=GetActorLocation()+FVector(0,0,90);
  const FVector Target=Player->GetActorLocation()+FVector(0,0,60);
