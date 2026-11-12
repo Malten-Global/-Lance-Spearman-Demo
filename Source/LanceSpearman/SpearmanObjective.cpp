@@ -13,7 +13,7 @@ ASpearmanObjective::ASpearmanObjective(){
  Marker->SetWorldScale3D(FVector(.8f));Marker->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
 void ASpearmanObjective::Activate(ASpearmanCharacter* Player){
- if(!IsValid(Player))return;
+ if(bComplete || !IsValid(Player))return;
  if(FVector::Dist(GetActorLocation(),Player->GetActorLocation())>240.f)return;
  if (!bActivated) {
   bActivated = true;
@@ -23,5 +23,6 @@ void ASpearmanObjective::Activate(ASpearmanCharacter* Player){
   return;
  }
  if(GEngine)GEngine->AddOnScreenDebugMessage(-1,12.f,FColor::Green,TEXT("LEVEL 1 COMPLETE: Encrypted package extracted. Press R or controller Menu to replay."));
- Destroy();
+ bComplete = true;
+ Marker->SetVisibility(false);
 }
