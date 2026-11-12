@@ -1,4 +1,5 @@
 #include "SpearmanGameMode.h"
+#include "SpearmanHUD.h"
 #include "SpearmanCharacter.h"
 #include "SpearmanGuard.h"
 #include "SpearmanObjective.h"
@@ -10,7 +11,7 @@
 #include "Engine/DirectionalLight.h"
 #include "Components/DirectionalLightComponent.h"
 #include "Engine/StaticMesh.h"
-ASpearmanGameMode::ASpearmanGameMode(){DefaultPawnClass=ASpearmanCharacter::StaticClass();}
+ASpearmanGameMode::ASpearmanGameMode(){DefaultPawnClass=ASpearmanCharacter::StaticClass();HUDClass=ASpearmanHUD::StaticClass();}
 void ASpearmanGameMode::SpawnBlock(const FVector& Position,const FVector& Scale){
  // StaticMeshActor defaults to static mobility; set the transform only after making it movable.
  AStaticMeshActor* A=GetWorld()->SpawnActor<AStaticMeshActor>();
