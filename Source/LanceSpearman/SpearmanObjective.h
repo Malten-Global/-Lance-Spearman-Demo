@@ -8,8 +8,11 @@ class LANCESPEARMAN_API ASpearmanObjective : public AActor {
  GENERATED_BODY()
 public:
  ASpearmanObjective();
+ bool HasPackage() const { return bActivated; }
+ bool IsComplete() const { return bComplete; }
  void Activate(ASpearmanCharacter* Player);
 protected:
  UPROPERTY(VisibleAnywhere) UStaticMeshComponent* Marker;
  bool bActivated=false;
+ bool bComplete=false;
 };
