@@ -89,10 +89,18 @@ Do not commit generated files. Mark unrun steps NOT RUN; attach logs for failure
 - Repeat after R restart and with a low frame rate. Check for obstacle penetration or repeated turning when trapped.
 - The current patrol reverses when blocked. Routing around an obstacle requires the planned navigation implementation.
 
+### Objective HUD checks (pending Windows playtest)
+- Wait at least 30 seconds at spawn. The objective and restart controls should stay visible.
+- Move toward the contact. Distance should decrease and switch to an interact prompt inside 240 cm.
+- Collect the package. The HUD should immediately switch to extraction and its new distance.
+- Extract. Completion should remain visible after debug text expires, with the marker hidden.
+- Press R. Confirm the HUD returns to finding the contact.
+- Test the panel at 1280x720 and 1920x1080.
+
 ## Remaining release blockers
 Lance uses a jointed basic-shape stand-in. A production skeletal character and locomotion clips are still required. Guards are primitive,
 stand-ins with obstacle-reversing patrols and a forward view cone; navigation-mesh routing remains pending; the contact is a sphere. No dedicated authored map,
-crowds, dialogue, proper HUD, pause menu,
+crowds, dialogue, pause menu,
 checkpoint system or production audio exists. Licensed art and performance/crash/
 controller/accessibility QA are outstanding. There are no Unreal automation tests
 or Windows CI yet. A successful clean Windows build, cook and both smoke runs are
