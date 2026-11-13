@@ -1,0 +1,13 @@
+{
+  "FileVersion": 3,
+  "EngineAssociation": "5.4",
+  "Category": "Games",
+  "Description": "Lance Spearman Windows PC UE5 Chapter 1 Level 1 vertical slice",
+  "Modules": [
+    {
+      "Name": "LanceSpearman",
+      "Type": "Runtime",
+      "LoadingPhase": "Default"
+    }
+  ]
+}
