@@ -10,6 +10,7 @@ public:
  ASpearmanObjective();
  bool HasPackage() const { return bActivated; }
  bool IsComplete() const { return bComplete; }
+ bool CanInteract(const AActor* Player) const;
  void Activate(ASpearmanCharacter* Player);
 protected:
  UPROPERTY(VisibleAnywhere) UStaticMeshComponent* Marker;
