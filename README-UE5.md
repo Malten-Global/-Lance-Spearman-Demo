@@ -89,6 +89,12 @@ Do not commit generated files. Mark unrun steps NOT RUN; attach logs for failure
 - Repeat after R restart and with a low frame rate. Check for obstacle penetration or repeated turning when trapped.
 - The current patrol reverses when blocked. Routing around an obstacle requires the planned navigation implementation.
 
+### Interaction obstruction checks (pending Windows playtest)
+- Approach the contact from an open side within 240 cm. Check that the interact prompt appears and pickup succeeds.
+- Place a blocking cube between Lance and the marker, while both remain within 240 cm. The HUD should request moving around the obstacle and E should leave the objective unchanged.
+- Repeat at extraction, then remove the obstruction and confirm completion succeeds.
+- Confirm the marker ignores its own visibility trace and completed objectives cannot be activated again.
+
 ### Objective HUD checks (pending Windows playtest)
 - Wait at least 30 seconds at spawn. The objective and restart controls should stay visible.
 - Move toward the contact. Distance should decrease and switch to an interact prompt inside 240 cm.
