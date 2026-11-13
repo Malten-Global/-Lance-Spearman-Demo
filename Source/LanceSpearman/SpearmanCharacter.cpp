@@ -71,10 +71,18 @@ void ASpearmanCharacter::MoveForward(float Value) { if(Controller&&Value!=0) Add
 void ASpearmanCharacter::MoveRight(float Value) { if(Controller&&Value!=0) AddMovementInput(FRotationMatrix(FRotator(0,Controller->GetControlRotation().Yaw,0)).GetUnitAxis(EAxis::Y),Value); }
 void ASpearmanCharacter::StartSprint(){GetCharacterMovement()->MaxWalkSpeed=650.f;}
 void ASpearmanCharacter::StopSprint(){GetCharacterMovement()->MaxWalkSpeed=350.f;}
-void ASpearmanCharacter::Interact(){
- ASpearmanObjective* Closest=nullptr;float Best=240.f;
- for(TActorIterator<ASpearmanObjective> It(GetWorld());It;++It){float D=FVector::Dist(GetActorLocation(),It->GetActorLocation());if(D<Best){Best=D;Closest=*It;}}
- if(Closest)Closest->Activate(this);
+void ASpearmanCharacter::Interact()
+{
+ ASpearmanObjective* Closest = nullptr;
+ float BestDistance = FMath::Square(240.f);
+ for (TActorIterator<ASpearmanObjective> It(GetWorld()); It; ++It) {
+  const float Distance = FVector::DistSquared(GetActorLocation(), It->GetActorLocation());
+  if (Distance < BestDistance && It->CanInteract(this)) {
+   BestDistance = Distance;
+   Closest = *It;
+  }
+ }
+ if (Closest) Closest->Activate(this);
 }
 void ASpearmanCharacter::RestartMission()
 {
