@@ -27,9 +27,11 @@ void ASpearmanHUD::DrawHUD()
    : TEXT("Find the courier contact");
   DrawText(Task, FLinearColor::White, 28.f, 54.f);
   const float Distance = FVector::Dist(Player->GetActorLocation(), Objective->GetActorLocation());
-  const FString Prompt = Distance < 240.f
+  const FString Prompt = Objective->CanInteract(Player)
    ? TEXT("E / controller X: Interact")
-   : FString::Printf(TEXT("Objective %.1f m away"), Distance / 100.f);
+   : Distance < 240.f
+    ? TEXT("Move around the obstacle to interact")
+    : FString::Printf(TEXT("Objective %.1f m away"), Distance / 100.f);
   DrawText(Prompt, FLinearColor::Yellow, 28.f, 82.f);
   break;
  }
