@@ -13,6 +13,8 @@ public:
  void MoveForward(float Value); void MoveRight(float Value);
  void StartSprint(); void StopSprint(); void Interact();
  void RestartMission();
+ void TurnAtRate(float Value);
+ void LookUpAtRate(float Value);
  virtual void Tick(float DeltaSeconds) override;
 protected:
  UPROPERTY(VisibleAnywhere) USpringArmComponent* CameraBoom;
