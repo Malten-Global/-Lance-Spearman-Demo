@@ -60,6 +60,8 @@ void ASpearmanCharacter::SetupPlayerInputComponent(UInputComponent* Input) {
  Input->BindAxis("MoveRight",this,&ASpearmanCharacter::MoveRight);
  Input->BindAxis("Turn",this,&APawn::AddControllerYawInput);
  Input->BindAxis("LookUp",this,&APawn::AddControllerPitchInput);
+ Input->BindAxis("TurnRate", this, &ASpearmanCharacter::TurnAtRate);
+ Input->BindAxis("LookUpRate", this, &ASpearmanCharacter::LookUpAtRate);
  Input->BindAction("Jump",IE_Pressed,this,&ACharacter::Jump);
  Input->BindAction("Jump",IE_Released,this,&ACharacter::StopJumping);
  Input->BindAction("Sprint",IE_Pressed,this,&ASpearmanCharacter::StartSprint);
@@ -86,8 +88,10 @@ void ASpearmanCharacter::Interact()
 }
 void ASpearmanCharacter::RestartMission()
 {
- // Reload the configured game map so the contact, guards and player start reset together.
- UGameplayStatics::OpenLevel(this, FName(TEXT("/Engine/Maps/Entry")));
+ // Reload the active map, including an authored mission map when one is supplied.
+ // Strip the editor's PIE prefix before travel.
+ const FString LevelName = UGameplayStatics::GetCurrentLevelName(this, true);
+ if (!LevelName.IsEmpty()) UGameplayStatics::OpenLevel(this, FName(*LevelName));
 }
 
 void ASpearmanCharacter::Tick(float DeltaSeconds)
@@ -102,4 +106,14 @@ void ASpearmanCharacter::Tick(float DeltaSeconds)
  RightHip->SetRelativeRotation(FRotator(-Pitch, 0, 0));
  LeftShoulder->SetRelativeRotation(FRotator(-Pitch, 0, 0));
  RightShoulder->SetRelativeRotation(FRotator(Pitch, 0, 0));
+}
+
+void ASpearmanCharacter::TurnAtRate(float Value)
+{
+ if (GetWorld()) AddControllerYawInput(Value * 90.f * GetWorld()->GetDeltaSeconds());
+}
+
+void ASpearmanCharacter::LookUpAtRate(float Value)
+{
+ if (GetWorld()) AddControllerPitchInput(Value * 90.f * GetWorld()->GetDeltaSeconds());
 }
