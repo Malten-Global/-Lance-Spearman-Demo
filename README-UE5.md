@@ -103,6 +103,12 @@ Do not commit generated files. Mark unrun steps NOT RUN; attach logs for failure
 - Press R. Confirm the HUD returns to finding the contact.
 - Test the panel at 1280x720 and 1920x1080.
 
+### Controller and active-map restart checks (pending Windows playtest)
+- Hold the right stick fully right for two seconds at 30, 60 and 120 FPS. Compare camera rotation with the same PlayerController input scaling. The angle should be consistent across frame rates.
+- Repeat with vertical look, half-stick movement and mouse movement. Mouse axes retain their direct input mapping.
+- Test R and controller Menu in Entry, then in an authored mission map with a unique visible landmark. Each restart should reload that same map.
+- Repeat in PIE and standalone packaged Development. Package any added mission map before testing it.
+
 ## Remaining release blockers
 Lance uses a jointed basic-shape stand-in. A production skeletal character and locomotion clips are still required. Guards are primitive,
 stand-ins with obstacle-reversing patrols and a forward view cone; navigation-mesh routing remains pending; the contact is a sphere. No dedicated authored map,
