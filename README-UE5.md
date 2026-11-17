@@ -109,10 +109,18 @@ Do not commit generated files. Mark unrun steps NOT RUN; attach logs for failure
 - Test R and controller Menu in Entry, then in an authored mission map with a unique visible landmark. Each restart should reload that same map.
 - Repeat in PIE and standalone packaged Development. Package any added mission map before testing it.
 
+### Pause/resume checks (pending Windows playtest)
+- Press P or controller View. Confirm the pause overlay appears and player movement, guards and mission interaction stop.
+- Press the same control to resume. Confirm the current pickup/extraction state is preserved.
+- Pause while holding sprint or jump, release it during pause, then resume. Confirm walk speed and jumping return to normal.
+- Press R or controller Menu while paused. Confirm the same map reloads unpaused, with a fresh contact objective.
+- In standalone, Escape also toggles pause. Use P in PIE because the editor may reserve Escape to end the play session.
+- Check the expanded objective panel at 1280x720 and 1920x1080.
+
 ## Remaining release blockers
 Lance uses a jointed basic-shape stand-in. A production skeletal character and locomotion clips are still required. Guards are primitive,
 stand-ins with obstacle-reversing patrols and a forward view cone; navigation-mesh routing remains pending; the contact is a sphere. No dedicated authored map,
-crowds, dialogue, pause menu,
+crowds, dialogue,
 checkpoint system or production audio exists. Licensed art and performance/crash/
 controller/accessibility QA are outstanding. There are no Unreal automation tests
 or Windows CI yet. A successful clean Windows build, cook and both smoke runs are
