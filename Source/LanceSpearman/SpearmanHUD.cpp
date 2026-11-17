@@ -2,6 +2,7 @@
 #include "SpearmanObjective.h"
 #include "Engine/Canvas.h"
 #include "EngineUtils.h"
+#include "Kismet/GameplayStatics.h"
 #include "GameFramework/PlayerController.h"
 #include "GameFramework/Pawn.h"
 
@@ -12,9 +13,15 @@ void ASpearmanHUD::DrawHUD()
  APawn* Player = PlayerOwner->GetPawn();
  if (!Player) return;
 
- DrawRect(FLinearColor(0.02f, 0.03f, 0.05f, 0.85f), 16.f, 16.f, 420.f, 124.f);
+ DrawRect(FLinearColor(0.02f, 0.03f, 0.05f, 0.85f), 16.f, 16.f, 420.f, 150.f);
  DrawText(TEXT("NAIROBI - ARRIVAL AT THE MARKET"), FLinearColor::Yellow, 28.f, 26.f);
  DrawText(TEXT("R / controller Menu: Restart"), FLinearColor::White, 28.f, 110.f);
+ DrawText(TEXT("P / controller View: Pause or resume"), FLinearColor::White, 28.f, 136.f);
+ if (UGameplayStatics::IsGamePaused(this)) {
+  DrawText(TEXT("MISSION PAUSED"), FLinearColor::Yellow, 28.f, 54.f);
+  DrawText(TEXT("Resume here or restart the mission with R / Menu"), FLinearColor::White, 28.f, 82.f);
+  return;
+ }
  for (TActorIterator<ASpearmanObjective> It(GetWorld()); It; ++It)
  {
   const ASpearmanObjective* Objective = *It;
