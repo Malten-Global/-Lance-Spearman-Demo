@@ -11,6 +11,7 @@
 #include "Engine/StaticMesh.h"
 #include "UObject/ConstructorHelpers.h"
 #include "Kismet/GameplayStatics.h"
+#include "GameFramework/PlayerController.h"
 ASpearmanCharacter::ASpearmanCharacter() {
  PrimaryActorTick.bCanEverTick = true;
  // A jointed stand-in makes the playable silhouette visible using packaged engine content.
@@ -63,10 +64,11 @@ void ASpearmanCharacter::SetupPlayerInputComponent(UInputComponent* Input) {
  Input->BindAxis("TurnRate", this, &ASpearmanCharacter::TurnAtRate);
  Input->BindAxis("LookUpRate", this, &ASpearmanCharacter::LookUpAtRate);
  Input->BindAction("Jump",IE_Pressed,this,&ACharacter::Jump);
- Input->BindAction("Jump",IE_Released,this,&ACharacter::StopJumping);
+ Input->BindAction("Jump",IE_Released,this,&ACharacter::StopJumping).bExecuteWhenPaused = true;
  Input->BindAction("Sprint",IE_Pressed,this,&ASpearmanCharacter::StartSprint);
- Input->BindAction("Sprint",IE_Released,this,&ASpearmanCharacter::StopSprint);
- Input->BindAction("RestartMission", IE_Pressed, this, &ASpearmanCharacter::RestartMission);
+ Input->BindAction("Sprint",IE_Released,this,&ASpearmanCharacter::StopSprint).bExecuteWhenPaused = true;
+ Input->BindAction("RestartMission", IE_Pressed, this, &ASpearmanCharacter::RestartMission).bExecuteWhenPaused = true;
+ Input->BindAction("PauseMission", IE_Pressed, this, &ASpearmanCharacter::TogglePause).bExecuteWhenPaused = true;
  Input->BindAction("Interact",IE_Pressed,this,&ASpearmanCharacter::Interact);
 }
 void ASpearmanCharacter::MoveForward(float Value) { if(Controller&&Value!=0) AddMovementInput(FRotationMatrix(FRotator(0,Controller->GetControlRotation().Yaw,0)).GetUnitAxis(EAxis::X),Value); }
@@ -88,6 +90,7 @@ void ASpearmanCharacter::Interact()
 }
 void ASpearmanCharacter::RestartMission()
 {
+ if (APlayerController* Player = Cast<APlayerController>(Controller)) Player->SetPause(false);
  // Reload the active map, including an authored mission map when one is supplied.
  // Strip the editor's PIE prefix before travel.
  const FString LevelName = UGameplayStatics::GetCurrentLevelName(this, true);
@@ -116,4 +119,13 @@ void ASpearmanCharacter::TurnAtRate(float Value)
 void ASpearmanCharacter::LookUpAtRate(float Value)
 {
  if (GetWorld()) AddControllerPitchInput(Value * 90.f * GetWorld()->GetDeltaSeconds());
+}
+
+void ASpearmanCharacter::TogglePause()
+{
+ APlayerController* Player = Cast<APlayerController>(Controller);
+ if (!Player) return;
+ StopSprint();
+ StopJumping();
+ Player->SetPause(!UGameplayStatics::IsGamePaused(this));
 }
