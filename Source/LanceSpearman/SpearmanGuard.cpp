@@ -1,6 +1,7 @@
 #include "SpearmanGuard.h"
 #include "SpearmanCharacter.h"
 #include "Components/StaticMeshComponent.h"
+#include "Components/CapsuleComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Engine/World.h"
 #include "Engine/StaticMesh.h"
@@ -8,8 +9,17 @@
 #include "UObject/ConstructorHelpers.h"
 ASpearmanGuard::ASpearmanGuard(){
  PrimaryActorTick.bCanEverTick=true;
+ // Keep the collider unscaled; visual proportions must not resize the patrol capsule.
+ Collision=CreateDefaultSubobject<UCapsuleComponent>(TEXT("GuardCollision"));
+ Collision->InitCapsuleSize(24.f,90.f);
+ Collision->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+ Collision->SetCollisionObjectType(ECC_Pawn);
+ Collision->SetCollisionResponseToAllChannels(ECR_Block);
+ Collision->SetCollisionResponseToChannel(ECC_Camera,ECR_Ignore);
+ Collision->SetGenerateOverlapEvents(false);
+ SetRootComponent(Collision);
  Body=CreateDefaultSubobject<UStaticMeshComponent>(TEXT("GuardBody"));
- SetRootComponent(Body);
+ Body->SetupAttachment(Collision);
  static ConstructorHelpers::FObjectFinder<UStaticMesh> Shape(TEXT("/Engine/BasicShapes/Cylinder.Cylinder"));
  if(Shape.Succeeded())Body->SetStaticMesh(Shape.Object);
  Body->SetRelativeScale3D(FVector(.45f,.45f,1.8f));
@@ -29,8 +39,8 @@ void ASpearmanGuard::Tick(float Dt){
  FHitResult Obstacle;
  FCollisionQueryParams PatrolQuery(SCENE_QUERY_STAT(GuardPatrol), false, this);
  const bool bBlocked = GetWorld()->SweepSingleByChannel(
-  Obstacle, Start, Next, FQuat::Identity, ECC_WorldStatic,
-  FCollisionShape::MakeCapsule(24.f, 90.f), PatrolQuery);
+  Obstacle, Start, Next, FQuat::Identity, ECC_Pawn,
+  FCollisionShape::MakeCapsule(Collision->GetScaledCapsuleRadius(), Collision->GetScaledCapsuleHalfHeight()), PatrolQuery);
  if (bBlocked) {
   bGoingOut = !bGoingOut;
  } else {
