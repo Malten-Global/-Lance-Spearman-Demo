@@ -83,6 +83,8 @@ Do not commit generated files. Mark unrun steps NOT RUN; attach logs for failure
 - Walk and sprint against all four perimeter walls and the corners. Check that the player stays on the floor and the camera recovers when moving away.
 
 ### Guard checks (pending Windows playtest)
+- Guards now have an unscaled 24 cm radius, 90 cm half-height blocking capsule, separate from their visual mesh. Walk and sprint into guards from the front, side and rear; Lance must not pass through them. Repeat while guards are moving and after restart.
+- Stand in a guard's patrol route. Its pawn-channel sweep should reverse before entering Lance's capsule. Check two guards meeting as well as stalls and boundary walls; verify no overlap, jitter or penetration at low frame rates.
 - Confirm patrols reverse at route ends and before stalls or perimeter walls. They should face their travel direction.
 - Approach behind a guard within detection range. Confirm there is no alert until entering its forward 120-degree view cone.
 - Approach in front within 420 cm, then repeat with a stall blocking sight. Only the unobstructed approach should alert.
