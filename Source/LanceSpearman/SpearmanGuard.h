@@ -3,6 +3,7 @@
 #include "GameFramework/Actor.h"
 #include "SpearmanGuard.generated.h"
 class UStaticMeshComponent;
+class UCapsuleComponent;
 UCLASS()
 class LANCESPEARMAN_API ASpearmanGuard : public AActor {
  GENERATED_BODY()
@@ -11,6 +12,7 @@ public:
  virtual void BeginPlay() override;
  virtual void Tick(float DeltaSeconds) override;
 protected:
+ UPROPERTY(VisibleAnywhere) UCapsuleComponent* Collision;
  UPROPERTY(VisibleAnywhere) UStaticMeshComponent* Body;
  UPROPERTY(EditAnywhere,Category="Patrol") float PatrolDistance=500.f;
  UPROPERTY(EditAnywhere,Category="Patrol") float WalkSpeed=120.f;
