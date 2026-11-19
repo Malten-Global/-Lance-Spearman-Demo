@@ -80,3 +80,40 @@ User requirement: attackers carry improvised weapons and guns to stop Lance reac
 - Failure and restart preserve prior earnings and do not award the current incomplete contract.
 - Save and reload preserve the completed contract and both totals consistently.
 - The completion receipt matches the persisted balances.
+
+## Lance's garage, pursuits and Tony's Bank — November 19, 2026
+**User requirements:** Lance is a detective in Nairobi City who follows bandits attempting to steal from Tony's Bank. His garage holds his Peugeot 504 and Harley-Davidson motorcycle, used to travel to assignments. Hostile cars trail him and ram his car to stop him. After pursuit damage, he must repair his car at the garage before proceeding to the mission.
+**Status:** narrative and gameplay requirements only. These vehicles, driving, pursuit AI, vehicle damage, repair gating, bank environment and detective investigations are not implemented in the UE5 slice.
+
+### Location and story integration
+- Treat the previously named Tony's Garage as Lance's home garage and repair base.
+- Add Tony's Bank as a Nairobi story location and investigation client.
+- Use clues, surveillance and following suspects to establish which bandits are planning a robbery; build assignments around investigating and stopping those attempts.
+- Preserve the existing courier mission as the introductory assignment. Connect its clues to the bank plot through authored story content rather than claiming that content already exists.
+
+### Vehicle and mission flow
+1. Accept a detective contract and select the Peugeot 504 or Harley-Davidson at Tony's Garage.
+2. Travel toward the assignment, with readable pursuit cues when hostile vehicles begin following Lance.
+3. Attackers attempt to intercept and ram the car. Vehicle damage affects its condition and is displayed clearly.
+4. After pursuit damage requiring repair, the mission objective changes to returning to Tony's Garage. Arrival at the assignment cannot bypass the repair requirement.
+5. Complete a repair, restore roadworthiness and resume the same contract without losing investigation progress.
+6. Complete the contract to receive the previously specified dollars and points.
+
+### Proposed implementation rules
+- Persist each owned vehicle's condition independently; switching vehicles must not silently clear an active required-repair objective.
+- Separate cosmetic scuffs from damage that triggers mandatory repair. Thresholds and collision tuning require playtesting.
+- Apply collision damage from meaningful impacts with a cooldown to prevent one prolonged contact from draining condition every frame.
+- Provide recovery/towing to the garage if the car cannot move. An introductory repair or recovery must remain available when Lance lacks dollars, so the mission cannot become permanently blocked.
+- Show the repair cost and resulting condition before confirmation. Deduct payment and restore condition together; reject duplicate repair requests.
+- Pause pursuit and repair timers with the game. Restart/reload rules must preserve saved vehicle ownership, balances and contract progress consistently.
+- Motorcycle pursuit, rider falls and recovery need separate handling and animation; do not reuse car collision behavior without validation.
+- Production Peugeot 504 and Harley-Davidson models, branding treatment, vehicle physics, audio and animation assets remain external asset/integration work.
+
+### Acceptance checks — not yet run
+- Both owned vehicles appear at the garage and can be selected, entered, driven and exited safely.
+- Pursuers follow roads, avoid walls and civilians, and produce readable interception attempts without teleporting into Lance.
+- A qualifying ram changes condition once per damage interval and activates the garage objective.
+- The assignment stays blocked until the required repair completes; changing vehicles, restarting or reloading cannot bypass it.
+- Repair restores the correct vehicle, charges the displayed amount once and resumes the same assignment.
+- A disabled vehicle and an empty wallet have a usable recovery path.
+- Bank investigation clues and suspect-following objectives advance in order and survive the intended save/reload flow.
