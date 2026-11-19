@@ -63,3 +63,16 @@ void ASpearmanGuard::Tick(float Dt){
   if(GEngine)GEngine->AddOnScreenDebugMessage(-1,4.f,FColor::Red,TEXT("GUARD ALERT: You were spotted! Keep your distance and use cover."));
  }
 }
+void ASpearmanGuard::ReceivePunch()
+{
+ if (IsDefeated()) return;
+ --HitsRemaining;
+ if (GEngine) GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Yellow,
+  FString::Printf(TEXT("Guard: %d hits remaining"), HitsRemaining));
+ if (IsDefeated()) {
+  SetActorEnableCollision(false);
+  SetActorTickEnabled(false);
+  Body->SetRelativeRotation(FRotator(0.f, 0.f, 90.f));
+  Body->SetRelativeLocation(FVector(0.f, 0.f, -75.f));
+ }
+}
