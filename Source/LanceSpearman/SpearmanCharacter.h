@@ -14,6 +14,7 @@ public:
  void StartSprint(); void StopSprint(); void Interact();
  void RestartMission();
  void TogglePause();
+ void Punch();
  void TurnAtRate(float Value);
  void LookUpAtRate(float Value);
  virtual void Tick(float DeltaSeconds) override;
@@ -25,6 +26,7 @@ private:
  UPROPERTY() USceneComponent* RightHip;
  UPROPERTY() USceneComponent* LeftShoulder;
  UPROPERTY() USceneComponent* RightShoulder;
+ float NextPunchTime = 0.f;
  float StridePhase = 0.f;
  float SwingDegrees = 0.f;
 };
