@@ -52,3 +52,31 @@ User requirement: attackers carry improvised weapons and guns to stop Lance reac
 - The objective stays locked while required attackers remain, then unlocks after the encounter.
 - Restart restores the initial encounter, health, ammunition and objective state.
 - Test in both PIE and a packaged UE5.4 Win64 build, including low frame rates.
+
+## Contracts, dollars and points — November 19, 2026
+**User requirement:** Lance accepts contracts to complete assignments. Successful completion awards dollars and points.
+**Status:** design only; contract selection, wallet, scoring, reward persistence and reward UI are not implemented.
+
+### Proposed rules
+- Dollars are fictional in-game currency, with no real-money payout or cash value.
+- Show each contract's assignment, completion conditions, dollar reward and points before acceptance.
+- For Nairobi Level 1, require the encounter to be cleared, the package collected and successful extraction before awarding the contract.
+- Award the completion payout once per contract in a campaign save. Replaying a completed contract is practice and does not grant the base payout again.
+- Failed, abandoned or restarted attempts do not award a completion payout.
+- Keep dollars and points separate: dollars support future equipment, ammunition and Tony's Garage services; points record mission achievement and progression. Spending and unlock systems remain planned.
+- Display a completion receipt with contract name, dollars earned, points earned and updated totals.
+- Reward amounts, bonus criteria, prices and progression thresholds remain to be balanced.
+
+### Implementation requirements
+- Give each contract a stable identifier and explicit available, active and completed states.
+- Persist completed contract identifiers and balances together in one save record; do not mark the reward delivered independently of the recorded balance.
+- Route all rewards through one completion operation that rejects duplicate completion calls.
+- Validate loaded balances and contract identifiers; handle missing or damaged saves explicitly.
+- Mission restart resets the encounter without erasing previously earned campaign rewards.
+
+### Acceptance checks — not yet run
+- Picking up the package alone grants no reward; valid extraction grants the displayed dollars and points.
+- Repeated extraction input, completion callbacks, reloads and replays cannot duplicate the base payout.
+- Failure and restart preserve prior earnings and do not award the current incomplete contract.
+- Save and reload preserve the completed contract and both totals consistently.
+- The completion receipt matches the persisted balances.
