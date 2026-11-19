@@ -1,5 +1,7 @@
 #include "SpearmanObjective.h"
 #include "SpearmanCharacter.h"
+#include "SpearmanGuard.h"
+#include "EngineUtils.h"
 #include "Components/StaticMeshComponent.h"
 #include "Engine/Engine.h"
 #include "Engine/World.h"
@@ -16,6 +18,11 @@ ASpearmanObjective::ASpearmanObjective(){
 bool ASpearmanObjective::CanInteract(const AActor* Player) const
 {
  if (bComplete || !IsValid(Player) || !GetWorld()) return false;
+ // The market encounter must be cleared before collecting the package.
+ if (!bActivated) {
+  for (TActorIterator<ASpearmanGuard> It(GetWorld()); It; ++It)
+   if (!It->IsDefeated()) return false;
+ }
  if (FVector::DistSquared(GetActorLocation(), Player->GetActorLocation()) >= FMath::Square(240.f)) return false;
 
  // Trace from the character's upper body so a nearby wall or stall blocks pickup.
