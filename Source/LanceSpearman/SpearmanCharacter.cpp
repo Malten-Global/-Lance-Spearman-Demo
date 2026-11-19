@@ -1,5 +1,6 @@
 #include "SpearmanCharacter.h"
 #include "SpearmanObjective.h"
+#include "SpearmanGuard.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -69,6 +70,7 @@ void ASpearmanCharacter::SetupPlayerInputComponent(UInputComponent* Input) {
  Input->BindAction("Sprint",IE_Released,this,&ASpearmanCharacter::StopSprint).bExecuteWhenPaused = true;
  Input->BindAction("RestartMission", IE_Pressed, this, &ASpearmanCharacter::RestartMission).bExecuteWhenPaused = true;
  Input->BindAction("PauseMission", IE_Pressed, this, &ASpearmanCharacter::TogglePause).bExecuteWhenPaused = true;
+ Input->BindAction("Punch",IE_Pressed,this,&ASpearmanCharacter::Punch);
  Input->BindAction("Interact",IE_Pressed,this,&ASpearmanCharacter::Interact);
 }
 void ASpearmanCharacter::MoveForward(float Value) { if(Controller&&Value!=0) AddMovementInput(FRotationMatrix(FRotator(0,Controller->GetControlRotation().Yaw,0)).GetUnitAxis(EAxis::X),Value); }
@@ -108,7 +110,8 @@ void ASpearmanCharacter::Tick(float DeltaSeconds)
  LeftHip->SetRelativeRotation(FRotator(Pitch, 0, 0));
  RightHip->SetRelativeRotation(FRotator(-Pitch, 0, 0));
  LeftShoulder->SetRelativeRotation(FRotator(-Pitch, 0, 0));
- RightShoulder->SetRelativeRotation(FRotator(Pitch, 0, 0));
+ const bool bPunching = GetWorld() && NextPunchTime - GetWorld()->GetTimeSeconds() > .3f;
+ RightShoulder->SetRelativeRotation(FRotator(bPunching ? -90.f : Pitch, 0, 0));
 }
 
 void ASpearmanCharacter::TurnAtRate(float Value)
@@ -128,4 +131,21 @@ void ASpearmanCharacter::TogglePause()
  StopSprint();
  StopJumping();
  Player->SetPause(!UGameplayStatics::IsGamePaused(this));
+}
+
+void ASpearmanCharacter::Punch()
+{
+ if (!GetWorld() || UGameplayStatics::IsGamePaused(this)) return;
+ const float Now = GetWorld()->GetTimeSeconds();
+ if (Now < NextPunchTime) return;
+ NextPunchTime = Now + .5f;
+ // A narrow forward strike stops at the first blocking surface.
+ const FVector Start = GetActorLocation() + FVector(0.f, 0.f, 35.f);
+ const FVector End = Start + GetActorForwardVector() * 140.f;
+ FHitResult Hit;
+ FCollisionQueryParams Query(SCENE_QUERY_STAT(LancePunch), false, this);
+ if (GetWorld()->SweepSingleByChannel(Hit, Start, End, FQuat::Identity,
+  ECC_Visibility, FCollisionShape::MakeSphere(20.f), Query)) {
+  if (ASpearmanGuard* Guard = Cast<ASpearmanGuard>(Hit.GetActor())) Guard->ReceivePunch();
+ }
 }
