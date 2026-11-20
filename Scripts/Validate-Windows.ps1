@@ -11,15 +11,24 @@ foreach ($Required in 'Engine/Build/BatchFiles/Build.bat','Engine/Build/BatchFil
   if (!(Test-Path (Join-Path $Engine $Required))) { throw "Missing engine tool: $Required" }
 }
 $Project = (Resolve-Path (Join-Path $PSScriptRoot '../LanceSpearman.uproject')).Path
-if (Test-Path $Output) { throw 'Choose a new output directory for this run.' }
-$Dir = (New-Item -ItemType Directory -Path $Output).FullName
+$RepoRoot = (Resolve-Path (Split-Path $Project)).Path
+# Resolve relative output paths using PowerShell's current location, before creating anything.
+$OutputPath = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($Output)
+$RepoPrefix = $RepoRoot.TrimEnd([char[]]"\/") + [IO.Path]::DirectorySeparatorChar
+if ($OutputPath.Equals($RepoRoot, [StringComparison]::OrdinalIgnoreCase) -or
+    $OutputPath.StartsWith($RepoPrefix, [StringComparison]::OrdinalIgnoreCase)) {
+  throw 'Choose an output directory outside the repository.'
+}
+$Commit = git -C $RepoRoot rev-parse HEAD
+if ($LASTEXITCODE) { throw 'Could not identify checkout' }
+$Dirty = git -C $RepoRoot status --porcelain
+if ($LASTEXITCODE) { throw 'Could not inspect checkout status' }
+if ($Dirty) { throw 'Use a clean checkout so the recorded commit identifies the build source.' }
+if (Test-Path $OutputPath) { throw 'Choose a new output directory for this run.' }
+$Dir = (New-Item -ItemType Directory -Path $OutputPath).FullName
 Start-Transcript -Path (Join-Path $Dir 'validation.log')
 try {
-  git -C (Split-Path $Project) rev-parse HEAD
-  if ($LASTEXITCODE) { throw 'Could not identify checkout' }
-  $Dirty = git -C (Split-Path $Project) status --porcelain
-  if ($LASTEXITCODE) { throw 'Could not inspect checkout status' }
-  if ($Dirty) { throw 'Use a clean checkout so the recorded commit identifies the build source.' }
+  Write-Host "Commit: $Commit"
   Write-Host "Engine: $($Version.MajorVersion).$($Version.MinorVersion).$($Version.PatchVersion)"
   Write-Host "Windows: $([Environment]::OSVersion.VersionString)"
   $Build = Join-Path $Engine 'Engine/Build/BatchFiles/Build.bat'
